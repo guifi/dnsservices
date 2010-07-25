@@ -1,0 +1,114 @@
+#! /bin/sh
+#
+# $Id$ 
+#
+
+set -e
+
+configfile='/etc/dnsservices/config.php';
+tmpfile=`/bin/tempfile -m 644`;
+master_dir='/etc/bind';
+
+. /usr/share/debconf/confmodule
+
+if [ "$1" = configure ]; then
+    lastversion="$2";
+    # lets give them a bind user/group in all cases.
+    getent group bind >/dev/null 2>&1 || addgroup --system bind
+    getent passwd bind >/dev/null 2>&1 ||
+        adduser --system --home /var/cache/bind --no-create-home \
+                --disabled-password --ingroup bind bind
+
+    if [ -z "$lastversion" ] || dpkg --compare-versions "$lastversion" lt 1:9.4.2-2 ; then
+        mkdir -p /var/lib/bind
+        chown root:bind /var/lib/bind
+        chmod 775 /var/lib/bind
+    fi
+
+    if [ ! -s /etc/bind/rndc.key ]; then
+        rndc-confgen -r /dev/urandom -a
+    fi
+
+	db_get dnsservices/DNSDataServerurl
+	DNSDataServerurl=$RET
+	db_get dnsservices/DNSGraphServerId
+	DNSGraphServerId=$RET
+	db_get dnsservices/forcefetch
+	forcefetch=$RET
+
+	/bin/cat << EOT > $tmpfile
+<?php
+
+// DNSDataServer_url: without ending backslash, the url where the data is
+\$DNSDataServer_url =  '$DNSDataServerurl';
+
+// DNSGraphServerID: Default Graph Server ID
+\$DNSGraphServerId = $DNSGraphServerId;
+
+\$master_dir = "/etc/bind";
+\$slave_dir = "/var/cache/bind";
+
+\$chroot = "";
+?>
+EOT
+
+        /usr/bin/ucf --three-way --debconf-ok $tmpfile $configfile
+        /bin/rm $tmpfile
+
+
+        if [ -f "$master_dir/named.conf.int.private" ]
+        then
+          echo 'file '$master_dir'/named.conf.int.private exists, not override'
+        else
+          touch $master_dir/named.conf.int.private && echo 'file '$master_dir'/named.conf.int.private created'
+        fi
+        if [ -f "$master_dir/named.conf.ext.private" ]
+        then
+          echo 'file '$master_dir'/named.conf.ext.private exists, not override'
+        else
+            touch $master_dir/named.conf.ext.private && echo 'file '$master_dir'/named.conf.ext.private created'
+        fi
+
+        cd /etc/bind && /usr/bin/php /usr/share/dnsservices/dnsservices.php;
+    # Deal with the aftermath of 9.2.1-5  - it's a hack, but hey..
+    if [ "$lastversion" = "9.2.1-5" ]; then
+        ugid=$(ls -l /etc/bind/rndc.key | awk '{print $3 $4}')
+        if [ "$ugid" = "bindbind" ]; then
+            chown root:root /etc/bind/rndc.key
+            chown root:bind /var/run/bind/run
+            chown root:bind /var/cache/bind
+        fi
+    fi
+
+    uid=$(ls -ln /etc/bind/rndc.key | awk '{print $3}')
+    if [ "$uid" = "0" ]; then
+        [ -n "$localconf" ] || chown bind /etc/bind/rndc.key
+        chgrp bind /etc/bind
+        chmod g+s /etc/bind
+        chgrp bind /etc/bind/rndc.key /var/run/bind/run /var/cache/bind
+        chgrp bind /etc/bind/named.conf*
+        chmod g+r /etc/bind/rndc.key /etc/bind/named.conf*
+        chmod g+rwx /var/run/bind/run /var/cache/bind
+    fi
+
+    # Reload AppArmor profile
+    if [ -x /etc/init.d/apparmor ]; then
+        invoke-rc.d apparmor force-reload || true
+    fi
+
+    if /bin/pidof /usr/sbin/named >/dev/null 2>&1; then
+        invoke-rc.d bind9 restart
+    else
+        invoke-rc.d bind9 start
+    fi
+fi
+
+db_stop
+
+# Automatically added by dh_installinit
+if [ -x "/etc/init.d/bind9" ]; then
+        update-rc.d bind9 defaults 15 85 >/dev/null || exit $?
+fi
+# End automatically added section
+
+

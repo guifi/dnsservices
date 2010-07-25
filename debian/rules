@@ -1,0 +1,21 @@
+#!/usr/bin/make -f
+  
+include /usr/share/cdbs/1/rules/debhelper.mk
+#include /usr/share/cdbs/1/class/makefile.mk
+
+# Add here any variable or target overrides you need.
+
+DEB_FIXPERMS_EXCLUDE := usr/share/dnsservices
+#DEB_DH_LINK_ARGS := /etc/dnsservices/config.php /usr/share/dnsservices/common/config.php
+
+#DEB_DH_LINK_ARGS := /usr/share/dnsservices /var/www/dnsservices /etc/dnsservices/config.php /usr/share/dnsservices/common/config.php
+
+# chown everything to nobody:nogroup to make suphp happy
+common-binary-post-install-indep::
+	find debian/dnsservices/usr/share/dnsservices/ -type d -exec chmod 0755 {} \;
+	find debian/dnsservices/usr/share/dnsservices/ -type f -exec chmod 0644 {} \;
+	find debian/dnsservices/usr/share/dnsservices/ -type f -exec chown nobody:nogroup {} \;
+	find debian/dnsservices/usr/share/dnsservices/ -name *.sh -exec chmod 0744 {} \;
+# Not nice :(
+	#find debian/dnsservices/var/lib/dnsservices/ -type d -exec chmod 0755 {} \;
+	#find debian/dnsservices/var/lib/dnsservices/ -type d -exec chown www-data:www-data {} \;

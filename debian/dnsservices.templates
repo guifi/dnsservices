@@ -1,0 +1,14 @@
+Template: dnsservices/DNSDataServerurl
+Type: string
+Default: http://guifi.net
+Description: DNSDataServer_url: without ending backslash, the url where the data is. (Default: http://guifi.net). Usually always is http://guifi.net.
+
+Template: dnsservices/DNSGraphServerId
+Type: string
+Default: 2627
+Description: Select your DNS Server Id to share your domains. (Default: 0).
+
+Template: dnsservices/forcefetch
+Type: boolean
+Default: true
+Description: Force to fetch DNS configuration now (CAUTION: This remove your actual configuration).

@@ -1,0 +1,3 @@
+etc/dnsservices
+usr/share/dnsservices
+var/log/dnsservices

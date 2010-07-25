@@ -1,0 +1,3 @@
+dh_make -e tomas.velazquez@guifi.net -f dnsservices.php
+dpkg-buildpackage -rfakeroot
+dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz

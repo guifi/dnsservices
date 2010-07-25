@@ -1,0 +1,39 @@
+#!/bin/sh -e
+# 
+# preinst maintainer script for the Debian autolatex-core package.
+#
+# summary of how this script can be called:
+#        * <new-preinst> `install'
+#        * <new-preinst> `install' <old-version>
+#        * <new-preinst> `upgrade' <old-version>
+#        * <old-preinst> `abort-upgrade' <new-version>
+#
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+
+case "$1" in
+  install|upgrade)
+	#CONFIGFILE="`dirname $0`/config"
+	#if [ -f "$CONFIGFILE" ]
+	#then
+	#	if $CONFIGFILE "pre-$1"; then true; else exit 1; fi
+	#else
+	#	echo "ERROR(preinst): No DebConf configuration script found: $CONFIGFILE" >&2
+	#	exit 1
+	#fi
+        if [ -f /tmp/last_update.dns ] ; then
+        	/bin/rm /tmp/last_update.dns
+        fi
+        if [ -f /tmp/last_dns ] ; then
+        	/bin/rm /tmp/last_dns
+        fi
+	;;
+  *)
+	;;
+esac
+
+#DEBHELPER#
+
+exit 0
+
+
