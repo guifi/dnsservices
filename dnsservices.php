@@ -56,7 +56,7 @@ function check_cnml($cnml) {
 
 class BIND {
   var $PROGRAM = "dnsservices";
-  var $VERSION = "1.1.0";
+  var $VERSION = "1.1.1";
   var $DATE;
   var $h_named;
   var $h_db;
@@ -379,15 +379,15 @@ class DNSservices {
             $dns->add_A("*", $Domain['domain_ip']);
             $dns->add_A("@", $Domain['domain_ip']);
           }
-          $priority=10;
+
           foreach ($Domain->host as $host) {
             if ($host['NS'] == "y") {
               $dns->add_NS("@", $host['name'].".".$Domain['zone']);
             }
 
             if ($host['MX'] == "y") {
+              $priority=$host['Priority'];
               $dns->add_MX("@", $host['name'].".".$Domain['zone'], $priority);
-              $priority+=10;
             }
 
             $dns->add_A($host['name'], $host['IPv4']);
@@ -567,7 +567,7 @@ EOF;
       return true;
     }
     else {
-      echo "\nServer ". $server ." for ". $zone ." is down.";
+      echo "\nServer ". $server ." for ". $zone ." is down, skipping until the next check.";
       return false;
     }
   }

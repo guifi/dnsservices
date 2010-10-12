@@ -1,3 +1,9 @@
+dnsservices (1.1.1) stable; urgency=low
+
+  * Fixed cron.d location.
+  * Updated dnsservices.php, now can use MX priority.
+
+ -- Miquel Martos <miquel.martos@guifi.net>  Tue, 12 Oct 2010 20:49:29 +0100
 dnsservices (1.1.0-02) stable; urgency=low
 
   * Added Simó Patch to check if remote dns servers are allocatable.
