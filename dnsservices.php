@@ -56,7 +56,7 @@ function check_cnml($cnml) {
 
 class BIND {
   var $PROGRAM = "dnsservices";
-  var $VERSION = "1.1.2";
+  var $VERSION = "1.1.3";
   var $DATE;
   var $h_named;
   var $h_db;
@@ -396,11 +396,9 @@ class DNSservices {
           }
 
         foreach ($Domain->delegation as $host) {
-         // $dns->zone((string)$_name,$host['name'], "slave", $host['IPv4'], "");
-
           if ($host['NS']) {
-            $dns->add_NS($host['NS']."." , $host['name']);
-            $dns->add_A($host['name'].".", $host['IPv4']);
+            $dns->add_NS($host['name']."." , $host['NS']);
+            $dns->add_A($host['NS'].".", $host['IPv4']);
           }
         }
       $dns->db_end();

@@ -1,3 +1,7 @@
+dnsservices (1.1.3) stable; urgency=low
+
+ * Fix on delegation creation.
+ -- Miquel Martos <miquel.martos@guifi.net>  Thu, 14 Oct 2010 01:02:29 +0100
 dnsservices (1.1.2) stable; urgency=low
 
  * Updated dnsservices.php, Now, the master domain, no generate slave domains for delegated hosts.
