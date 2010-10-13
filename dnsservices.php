@@ -56,7 +56,7 @@ function check_cnml($cnml) {
 
 class BIND {
   var $PROGRAM = "dnsservices";
-  var $VERSION = "1.1.1";
+  var $VERSION = "1.1.2";
   var $DATE;
   var $h_named;
   var $h_db;
@@ -396,7 +396,7 @@ class DNSservices {
           }
 
         foreach ($Domain->delegation as $host) {
-          $dns->zone((string)$_name,$host['name'], "slave", $host['IPv4'], "");
+         // $dns->zone((string)$_name,$host['name'], "slave", $host['IPv4'], "");
 
           if ($host['NS']) {
             $dns->add_NS($host['NS']."." , $host['name']);
@@ -561,13 +561,13 @@ EOF;
  */
   function checkNameserver($server, $zone){
     // attempt to connect
-    if ($x = @fsockopen($server, 53)) {
+    if ($x = @fsockopen($server, 53, $errno, $errstr, 7)) {
       //close connection
       if ($x) @fclose($x);
       return true;
     }
     else {
-      echo "\nServer ". $server ." for ". $zone ." is down, skipping until the next check.";
+      echo "Server ". $server ." for ". $zone ." is down, skipping until the next check.\n";
       return false;
     }
   }
@@ -579,7 +579,7 @@ EOF;
   if ($updated = true) {
     if (count($argv) == 1) {
        $secs = $DNSGraphServerId % 285;
-       print "Sleeping for ".$secs." seconds to avoid server peaks.";
+       echo "Sleeping for ".$secs." seconds to avoid server peaks.\n";
        sleep($secs);
     }
     $gdns = new DNSservices($DNSDataServer_url, $DNSGraphServerId, $master_dir, $slave_dir, $chroot);
