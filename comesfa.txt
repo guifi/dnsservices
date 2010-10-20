@@ -1,3 +1,6 @@
-dh_make -e tomas.velazquez@guifi.net -f dnsservices.php
+dch -i (comentar els canvis nous )
+dh_make -e usuari@correu.xx -f dnsservices.php
 dpkg-buildpackage -rfakeroot
+
+// per generar el repositori.
 dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz

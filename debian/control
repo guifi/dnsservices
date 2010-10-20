@@ -1,7 +1,7 @@
 Source: dnsservices
 Section: web
 Priority: optional
-Maintainer: Tomas Velazquez <tomas.velazquez@guifi.net>
+Maintainer: Miquel Martos <miquel.martos@guifi.net>
 Build-Depends: cdbs, debhelper (>= 5)
 Standards-Version: 3.7.2
 

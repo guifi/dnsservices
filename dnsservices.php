@@ -56,7 +56,7 @@ function check_cnml($cnml) {
 
 class BIND {
   var $PROGRAM = "dnsservices";
-  var $VERSION = "1.1.3";
+  var $VERSION = "1.1.4";
   var $DATE;
   var $h_named;
   var $h_db;
@@ -174,7 +174,7 @@ EOF;
 
   function db_ini($domain, $nameserver, $contact) {
     $this->h_db = fopen($this->chroot.$this->master_dir."/".$domain, "w");
-    $this->add_db_header($nameserver, $contact);
+    $this->add_db_header($nameserver, $domain, $contact);
   }
 
   function db_end() {
@@ -269,20 +269,24 @@ EOF;
     return $str;
   }
 
-  function add_db_header($nameserver, $email) {
+  function add_db_header($nameserver, $zone, $email) {
 
     list($user,$domain) = split('@',$email,2);
     $user = str_replace(".", "\.", $user);
     $contact = $user.".".$domain;
     
     //fwrite($this->h_db,"\$TTL 38400\n");
-    fwrite($this->h_db,/*"\$ORIGIN $dtail.\n"*/ "@\tIN\tSOA\t$nameserver.$domain. $contact. (\n");
+    fwrite($this->h_db,/*"\$ORIGIN $dtail.\n"*/ "@\tIN\tSOA\t$nameserver.$zone. $contact. (\n");
 
     $refresh = 10800;
     $retry = 3600;
     $expire = 604800;
-    $ttl = 86400;
+    $ttl = 38400;
     fwrite($this->h_db, "\t\t$this->serial $refresh $retry $expire $ttl )\n");
+  }
+
+  function txt_NS() {
+    fwrite($this->h_db, "\n; DNS Servers\n");
   }
 
   function add_NS($hosts, $ips) {
@@ -298,6 +302,10 @@ EOF;
     }
   }
 
+  function txt_A() {
+    fwrite($this->h_db, "\n; Hosts/A Records\n");
+  }
+
   function add_A($hosts, $ips) {
     if ($hosts != "" && $ips != "") {
       $hosts = split(",",$hosts);
@@ -311,7 +319,27 @@ EOF;
     }
   }
 
+  function txt_CNAME() {
+    fwrite($this->h_db, "\n; Aliases/CNAME Records\n");
+  }
+
   function add_CNAME($hosts, $domain, $mdomain) {
+    if ($hosts != "" && $domain != "" && $mdomain != "") {      
+      $hosts = split(",",$hosts);
+      foreach ($hosts as $host) {
+        //$host = $this->addtabs($host);
+        ////echo strlen($mdomain)."\n";
+        if ($host[strlen($host)-1] != ".")
+          fwrite($this->h_db,$this->addtabs($host)."\tIN\tCNAME\t\t".$domain.".".$mdomain.".\n");
+      }
+    }
+  }
+
+  function txt_CNAMEEXT() {
+    fwrite($this->h_db, "\n; Aliases/CNAME Records to an external domains.\n");
+  }
+
+  function add_CNAMEEXT($hosts, $domain, $mdomain) {
     if ($hosts != "" && $domain != "" && $mdomain != "") {      
       $hosts = split(",",$hosts);
       foreach ($hosts as $host) {
@@ -319,10 +347,16 @@ EOF;
         ////echo strlen($mdomain)."\n";
         if ($host[strlen($host)-1] == ".")
           fwrite($this->h_db,$this->addtabs($domain)."\tIN\tCNAME\t\t".$host."\n");
-        else
-          fwrite($this->h_db,$this->addtabs($host)."\tIN\tCNAME\t\t".$domain.".".$mdomain.".\n");
       }
     }
+  }
+
+  function txt_DELEGATIONS() {
+    fwrite($this->h_db, "\n; Delegations\n");
+  }
+
+  function txt_MX() {
+    fwrite($this->h_db, "\n; MailServer/MX Records\n");
   }
 
   function add_MX($hosts, $ips, $priority = "") {
@@ -379,22 +413,32 @@ class DNSservices {
             $dns->add_A("*", $Domain['domain_ip']);
             $dns->add_A("@", $Domain['domain_ip']);
           }
-
+          $dns->txt_NS();
           foreach ($Domain->host as $host) {
             if ($host['NS'] == "y") {
               $dns->add_NS("@", $host['name'].".".$Domain['zone']);
             }
-
+          }
+          $dns->txt_MX();
+          foreach ($Domain->host as $host) {
             if ($host['MX'] == "y") {
               $priority=$host['Priority'];
               $dns->add_MX("@", $host['name'].".".$Domain['zone'], $priority);
             }
-
+          }
+          $dns->txt_A();
+          foreach ($Domain->host as $host) {
             $dns->add_A($host['name'], $host['IPv4']);
-
+          }
+          $dns->txt_CNAME();
+          foreach ($Domain->host as $host) {
             $dns->add_CNAME($host['CNAME'], $host['name'],/*.".".*/ $Domain['zone']);
           }
-
+          $dns->txt_CNAMEEXT();
+          foreach ($Domain->host as $host) {
+            $dns->add_CNAMEEXT($host['CNAME'], $host['name'],/*.".".*/ $Domain['zone']);
+          }
+          $dns->txt_DELEGATIONS();
         foreach ($Domain->delegation as $host) {
           if ($host['NS']) {
             $dns->add_NS($host['name']."." , $host['NS']);
