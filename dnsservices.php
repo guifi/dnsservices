@@ -56,7 +56,7 @@ function check_cnml($cnml) {
 
 class BIND {
   var $PROGRAM = "dnsservices";
-  var $VERSION = "1.1.4";
+  var $VERSION = "1.1.5";
   var $DATE;
   var $h_named;
   var $h_db;
@@ -178,6 +178,7 @@ EOF;
   }
 
   function db_end() {
+    fwrite($this->h_db, "\n; End of configuration\n\n");
     fclose($this->h_db);
   }
 
@@ -327,8 +328,6 @@ EOF;
     if ($hosts != "" && $domain != "" && $mdomain != "") {      
       $hosts = split(",",$hosts);
       foreach ($hosts as $host) {
-        //$host = $this->addtabs($host);
-        ////echo strlen($mdomain)."\n";
         if ($host[strlen($host)-1] != ".")
           fwrite($this->h_db,$this->addtabs($host)."\tIN\tCNAME\t\t".$domain.".".$mdomain.".\n");
       }
@@ -370,9 +369,25 @@ EOF;
         }
       }
     }
-
   }
 
+  function txt_extMX() {
+    fwrite($this->h_db, "\n; External MailServer/MX Records\n");
+  }
+
+  function add_extMX($extmx, $ips, $priority) {
+    if ($extmx != "") {
+      $extmx = split(",",$extmx);
+      foreach ($extmx as $mx) {
+        $mx = $this->addtabs($mx);
+        $_ips = split(",",$ips);
+        foreach ($_ips as $ip) {
+         $priority = $priority+10;
+          fwrite($this->h_db,"$mx\tIN\tMX\t$priority\t$ip.\n");
+        }
+      }
+    }
+  }
 } // end BIND
 
 
@@ -426,6 +441,12 @@ class DNSservices {
               $dns->add_MX("@", $host['name'].".".$Domain['zone'], $priority);
             }
           }
+          $dns->txt_extMX();
+          if ($Domain['externalMX'] != "") {
+              $priority=$host['Priority'];
+              $dns->add_extMX("@", $Domain['externalMX'], $priority);
+            }
+
           $dns->txt_A();
           foreach ($Domain->host as $host) {
             $dns->add_A($host['name'], $host['IPv4']);
