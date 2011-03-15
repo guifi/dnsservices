@@ -1,3 +1,36 @@
+dnsservices (1.1.10) stable; urgency=low
+
+  * Enabled named.conf option : listen-on-v6
+
+ -- Miquel Martos <miquel.martos@guifi.net>  Sun, 13 Mar 2011 01:52:29 +0100
+
+dnsservices (1.1.9) stable; urgency=low
+
+  * Some fixes
+
+ -- Miquel Martos <miquel.martos@guifi.net>  Sat, 12 Mar 2011 17:20:29 +0100
+
+dnsservices (1.1.8) stable; urgency=low
+
+  * Initial IPv6 Support
+
+ -- Miquel Martos <miquel.martos@guifi.net>  Sat, 12 Mar 2011 13:35:29 +0100
+
+dnsservices (1.1.7) stable; urgency=low
+
+  * Fixed dependances.
+
+ -- Miquel Martos <miquel.martos@guifi.net>  Mon, 1 Nov 2010 18:03:29 +0100
+
+dnsservices (1.1.6) stable; urgency=low
+
+  * Added file named.conf.options.private
+  * Now, named daemon work on all interfaces.
+  * changed sleep time from 285 to 160
+
+ -- Miquel Martos <miquel.martos@guifi.net>  Mon, 1 Nov 2010 18:03:29 +0100
+
+
 dnsservices (1.1.5) stable; urgency=low
 
   * Added support for external MailServers.

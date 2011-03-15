@@ -56,7 +56,7 @@ function check_cnml($cnml) {
 
 class BIND {
   var $PROGRAM = "dnsservices";
-  var $VERSION = "1.1.5";
+  var $VERSION = "1.1.10";
   var $DATE;
   var $h_named;
   var $h_db;
@@ -82,7 +82,11 @@ options {
         auth-nxdomain no;    # conform to RFC103
 	allow-query { any; };
 	recursion no;
+	listen-on { any; };
+	listen-on-v6 { any; };
 };
+
+include "$this->master_dir/named.conf.options.private";
 
 EOF;
     fwrite($this->h_named, $file);
@@ -190,7 +194,7 @@ EOF;
       $n = $domain;
     switch($type){
     case "master":
-      $op .= "file \"".$this->master_dir."/".$n."\"; allow-transfer { ".$transfer."; };";
+      $op .= "file \"".$this->master_dir."/".$n."\"; notify yes; allow-transfer { ".$transfer."; };";
       break;
     case "slave":
       $op .= "file \"".$this->slave_dir."/".$n."\"; ";
@@ -307,6 +311,10 @@ EOF;
     fwrite($this->h_db, "\n; Hosts/A Records\n");
   }
 
+  function txt_AAAA() {
+    fwrite($this->h_db, "\n; Hosts/AAAA Records\n");
+  }
+
   function add_A($hosts, $ips) {
     if ($hosts != "" && $ips != "") {
       $hosts = split(",",$hosts);
@@ -318,6 +326,19 @@ EOF;
         }
       }
     }
+  }
+
+  function add_AAAA($hosts, $ips) {
+    if ($hosts != "" && $ips != "") {
+      $hosts = split(",",$hosts);
+      foreach ($hosts as $host) {
+        $host = $this->addtabs($host);
+        $_ips = split(",",$ips);
+        foreach ($_ips as $ip) {
+          fwrite($this->h_db,"$host\tIN\tAAAA\t\t$ip\n");
+        }
+      }  
+    }  
   }
 
   function txt_CNAME() {
@@ -428,6 +449,11 @@ class DNSservices {
             $dns->add_A("*", $Domain['domain_ip']);
             $dns->add_A("@", $Domain['domain_ip']);
           }
+          if ($Domain['domain_ip_v6'] != "") {
+            $dns->add_AAAA("*", $Domain['domain_ip_v6']);
+            $dns->add_AAAA("@", $Domain['domain_ip_v6']);
+          }
+
           $dns->txt_NS();
           foreach ($Domain->host as $host) {
             if ($host['NS'] == "y") {
@@ -450,6 +476,10 @@ class DNSservices {
           $dns->txt_A();
           foreach ($Domain->host as $host) {
             $dns->add_A($host['name'], $host['IPv4']);
+          }
+          $dns->txt_AAAA();
+          foreach ($Domain->host as $host) {
+            $dns->add_AAAA($host['name'], $host['IPv6']);
           }
           $dns->txt_CNAME();
           foreach ($Domain->host as $host) {
@@ -641,7 +671,7 @@ EOF;
   $updated = check_updated($DNSDataServer_url);
   if ($updated = true) {
     if (count($argv) == 1) {
-       $secs = $DNSGraphServerId % 285;
+       $secs = $DNSGraphServerId % 160;
        echo "Sleeping for ".$secs." seconds to avoid server peaks.\n";
        sleep($secs);
     }

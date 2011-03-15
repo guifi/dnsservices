@@ -7,8 +7,8 @@ Standards-Version: 3.7.2
 
 Package: dnsservices
 Architecture: all
-Depends: ${misc:Depends}, php5, php5-cli, php5-gd, php5-dev, debhelper, build-essential, bind9
+Depends: ${misc:Depends}, php5-cli, bind9
 Description: This software provides automatic BIND configuration.
  .
- Uses nodexchange as a input format, and provides BIND 
+ Uses CNML/xml as a input format, and provides BIND 
  configuration files using web configuration database.

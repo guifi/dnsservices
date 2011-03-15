@@ -68,6 +68,12 @@ EOT
         else
             touch $master_dir/named.conf.ext.private && echo 'file '$master_dir'/named.conf.ext.private created'
         fi
+        if [ -f "$master_dir/named.conf.options.private" ]
+        then
+          echo 'file '$master_dir'/named.conf.options.private exists, not override'
+        else
+          touch $master_dir/named.conf.options.private && echo 'file '$master_dir'/named.conf.options.private created'
+        fi
 
         cd /etc/bind && /usr/bin/php /usr/share/dnsservices/dnsservices.php;
     # Deal with the aftermath of 9.2.1-5  - it's a hack, but hey..
