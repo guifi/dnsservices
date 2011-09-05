@@ -1,3 +1,22 @@
+dnsservices (1.1.13) stable; urgency=low
+
+  * Add support for external Nameservers
+
+ -- Miquel Martos <miquel.martos@guifi.net>  Wed, 20 Apr 2011 18:03:29 +0100
+
+dnsservices (1.1.12) stable; urgency=low
+
+  * Revert ExternalMX fix from last, version.
+
+ -- Miquel Martos <miquel.martos@guifi.net>  Wed, 20 Apr 2011 18:03:29 +0100
+
+dnsservices (1.1.11) stable; urgency=low
+
+  * Now, I get reverse ip addres from a dump
+  * ExternalMX fix!
+
+ -- Miquel Martos <miquel.martos@guifi.net>  Sat, 02 Apr 2011 20:29:29 +0100
+
 dnsservices (1.1.10) stable; urgency=low
 
   * Enabled named.conf option : listen-on-v6

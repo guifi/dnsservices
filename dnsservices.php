@@ -4,11 +4,11 @@ function check_cnml($cnml) {
   $header = substr($cnml,0,5);
     if ($header == '<?xml') {
       return true;
-    } 
+    }
     else {
       echo date("YmdHi")." Invalid CNML! cannot update! check master cnml server url on /etc/dnservices/config.php\nor check your Internent/Guifi.net connection.\n named.conf not changed! \n";
       exit();
-    } 
+    }
 }
 
   function check_updated($url) {
@@ -56,7 +56,7 @@ function check_cnml($cnml) {
 
 class BIND {
   var $PROGRAM = "dnsservices";
-  var $VERSION = "1.1.10";
+  var $VERSION = "1.1.13";
   var $DATE;
   var $h_named;
   var $h_db;
@@ -224,7 +224,7 @@ EOF;
   }
 
   function named() {
-    
+
     $this->h_named = fopen($this->named_conf, "w");
 
     $file = <<<EOF
@@ -279,14 +279,14 @@ EOF;
     list($user,$domain) = split('@',$email,2);
     $user = str_replace(".", "\.", $user);
     $contact = $user.".".$domain;
-    
+
     //fwrite($this->h_db,"\$TTL 38400\n");
     fwrite($this->h_db,/*"\$ORIGIN $dtail.\n"*/ "@\tIN\tSOA\t$nameserver.$zone. $contact. (\n");
 
-    $refresh = 10800;
-    $retry = 3600;
-    $expire = 604800;
-    $ttl = 38400;
+    $refresh = 43200;
+    $retry = 7200;
+    $expire = 1209600;
+    $ttl = 7200;
     fwrite($this->h_db, "\t\t$this->serial $refresh $retry $expire $ttl )\n");
   }
 
@@ -307,6 +307,22 @@ EOF;
     }
   }
 
+  function txt_extNS() {
+    fwrite($this->h_db, "\n; Domain External Namservers Records\n");
+  }
+
+  function add_extNS($hosts, $ips) {
+    if ($hosts != "" && $ips != "") {
+      $hosts = split(",",$hosts);
+      foreach ($hosts as $host) {
+        $host = $this->addtabs($host);
+        $_ips = split(",",$ips);
+        foreach ($_ips as $ip) {
+          fwrite($this->h_db,"$host\tIN\tNS\t\t$ip.\n");
+        }
+      }
+    }
+  }
   function txt_A() {
     fwrite($this->h_db, "\n; Hosts/A Records\n");
   }
@@ -337,8 +353,8 @@ EOF;
         foreach ($_ips as $ip) {
           fwrite($this->h_db,"$host\tIN\tAAAA\t\t$ip\n");
         }
-      }  
-    }  
+      }
+    }
   }
 
   function txt_CNAME() {
@@ -346,7 +362,7 @@ EOF;
   }
 
   function add_CNAME($hosts, $domain, $mdomain) {
-    if ($hosts != "" && $domain != "" && $mdomain != "") {      
+    if ($hosts != "" && $domain != "" && $mdomain != "") {
       $hosts = split(",",$hosts);
       foreach ($hosts as $host) {
         if ($host[strlen($host)-1] != ".")
@@ -360,7 +376,7 @@ EOF;
   }
 
   function add_CNAMEEXT($hosts, $domain, $mdomain) {
-    if ($hosts != "" && $domain != "" && $mdomain != "") {      
+    if ($hosts != "" && $domain != "" && $mdomain != "") {
       $hosts = split(",",$hosts);
       foreach ($hosts as $host) {
         //$host = $this->addtabs($host);
@@ -433,7 +449,7 @@ class DNSservices {
     else
       $dns->view_ini("internal", $op);
 
-    
+
     $dns->add_default_zones($_name);
 
     foreach ($domains->master as $Domain) {
@@ -460,6 +476,11 @@ class DNSservices {
               $dns->add_NS("@", $host['name'].".".$Domain['zone']);
             }
           }
+          $dns->txt_extNS();
+          if ($Domain['externalNS'] != "") {
+            $dns->add_extNS("@", $Domain['externalNS']);
+          }
+
           $dns->txt_MX();
           foreach ($Domain->host as $host) {
             if ($host['MX'] == "y") {
@@ -469,9 +490,9 @@ class DNSservices {
           }
           $dns->txt_extMX();
           if ($Domain['externalMX'] != "") {
-              $priority=$host['Priority'];
-              $dns->add_extMX("@", $Domain['externalMX'], $priority);
-            }
+            $priority=$host['Priority'];
+            $dns->add_extMX("@", $Domain['externalMX'], $priority);
+          }
 
           $dns->txt_A();
           foreach ($Domain->host as $host) {
@@ -518,7 +539,7 @@ class DNSservices {
   }
 
   function named() {
-    
+
     $url = $this->cnml_host."/guifi/cnml/".$this->service_id."/domains";
     $cnml = '';
     $h = fopen($url, "r") or die(date("YmdHi")." xUnable to fetch CNML.\n");
@@ -598,7 +619,7 @@ EOF;
 
 EOF;
 
-    $url = $this->cnml_host."/guifi/cnml/0/ips";
+    $url = $this->cnml_host."/dump/ips";
     $cnml = '';
     $h = fopen( $url , "r") or die(date("YmdHi")." aUnable to fetch CNML.\n");
       while (!feof($h)) { $cnml .= fgets( $h ) or die(date("YmdHi")." aUnable to read CNML.\n"); }
@@ -628,7 +649,7 @@ EOF;
             break;
             case '10':
             $rrz10 .= $tmp;
-            break;			
+            break;
           }
        }
     }
@@ -648,7 +669,7 @@ EOF;
     fwrite( $h, $ipguifi ) or die(date("YmdHi")." Unable to write to file ($fn).\n");
     fclose($h);
   }
- 
+
 /*
  * Check the connectivity with the server name
  */
@@ -667,17 +688,16 @@ EOF;
 } // end DNSservices
 
   require_once("/etc/dnsservices/config.php");
-
   $updated = check_updated($DNSDataServer_url);
   if ($updated = true) {
     if (count($argv) == 1) {
-       $secs = $DNSGraphServerId % 160;
+       $secs = $DNSGraphServerId % 120;
        echo "Sleeping for ".$secs." seconds to avoid server peaks.\n";
        sleep($secs);
     }
     $gdns = new DNSservices($DNSDataServer_url, $DNSGraphServerId, $master_dir, $slave_dir, $chroot);
     $gdns->named();
-    $gdns->rrz(); 
+    $gdns->rrz();
   }
 
 ?>
