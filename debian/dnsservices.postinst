@@ -33,8 +33,6 @@ if [ "$1" = configure ]; then
 	DNSDataServerurl=$RET
 	db_get dnsservices/DNSGraphServerId
 	DNSGraphServerId=$RET
-	db_get dnsservices/forcefetch
-	forcefetch=$RET
 
 	/bin/cat << EOT > $tmpfile
 <?php
@@ -76,6 +74,7 @@ EOT
         fi
 
         cd /etc/bind && /usr/bin/php /usr/share/dnsservices/dnsservices.php;
+
     # Deal with the aftermath of 9.2.1-5  - it's a hack, but hey..
     if [ "$lastversion" = "9.2.1-5" ]; then
         ugid=$(ls -l /etc/bind/rndc.key | awk '{print $3 $4}')

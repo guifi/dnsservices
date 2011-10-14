@@ -1,1 +1,3 @@
 dnsservices.php usr/share/dnsservices/
+tools/guinux/dnsconfig.pl usr/share/dnsservices/
+tools/guinux/config.php.guinux /etc/dnsservices/

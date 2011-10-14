@@ -199,7 +199,7 @@ EOF;
     case "slave":
       $op .= "file \"".$this->slave_dir."/".$n."\"; ";
       $op .= "masters { ";
-      $masters = split(",",$list);
+      $masters = explode(",",$list);
       foreach ($masters as $ip) {
         $op .= $ip."; ";
       }
@@ -208,7 +208,7 @@ EOF;
     case "forward":
       $op .= "forward first; ";
       $op .= "forwarders { ";
-      $masters = split(",",$list);
+      $masters = explode(",",$list);
       foreach ($masters as $ip) {
         $op .= $ip."; ";
       }
@@ -276,7 +276,7 @@ EOF;
 
   function add_db_header($nameserver, $zone, $email) {
 
-    list($user,$domain) = split('@',$email,2);
+    list($user,$domain) = explode('@',$email,2);
     $user = str_replace(".", "\.", $user);
     $contact = $user.".".$domain;
 
@@ -296,10 +296,10 @@ EOF;
 
   function add_NS($hosts, $ips) {
     if ($hosts != "" && $ips != "") {
-      $hosts = split(",",$hosts);
+      $hosts = explode(",",$hosts);
       foreach ($hosts as $host) {
         $host = $this->addtabs($host);
-        $_ips = split(",",$ips);
+        $_ips = explode(",",$ips);
         foreach ($_ips as $ip) {
           fwrite($this->h_db,"$host\tIN\tNS\t\t$ip.\n");
         }
@@ -313,10 +313,10 @@ EOF;
 
   function add_extNS($hosts, $ips) {
     if ($hosts != "" && $ips != "") {
-      $hosts = split(",",$hosts);
+      $hosts = explode(",",$hosts);
       foreach ($hosts as $host) {
         $host = $this->addtabs($host);
-        $_ips = split(",",$ips);
+        $_ips = explode(",",$ips);
         foreach ($_ips as $ip) {
           fwrite($this->h_db,"$host\tIN\tNS\t\t$ip.\n");
         }
@@ -333,10 +333,10 @@ EOF;
 
   function add_A($hosts, $ips) {
     if ($hosts != "" && $ips != "") {
-      $hosts = split(",",$hosts);
+      $hosts = explode(",",$hosts);
       foreach ($hosts as $host) {
         $host = $this->addtabs($host);
-        $_ips = split(",",$ips);
+        $_ips = explode(",",$ips);
         foreach ($_ips as $ip) {
           fwrite($this->h_db,"$host\tIN\tA\t\t$ip\n");
         }
@@ -346,10 +346,10 @@ EOF;
 
   function add_AAAA($hosts, $ips) {
     if ($hosts != "" && $ips != "") {
-      $hosts = split(",",$hosts);
+      $hosts = explode(",",$hosts);
       foreach ($hosts as $host) {
         $host = $this->addtabs($host);
-        $_ips = split(",",$ips);
+        $_ips = explode(",",$ips);
         foreach ($_ips as $ip) {
           fwrite($this->h_db,"$host\tIN\tAAAA\t\t$ip\n");
         }
@@ -363,7 +363,7 @@ EOF;
 
   function add_CNAME($hosts, $domain, $mdomain) {
     if ($hosts != "" && $domain != "" && $mdomain != "") {
-      $hosts = split(",",$hosts);
+      $hosts = explode(",",$hosts);
       foreach ($hosts as $host) {
         if ($host[strlen($host)-1] != ".")
           fwrite($this->h_db,$this->addtabs($host)."\tIN\tCNAME\t\t".$domain.".".$mdomain.".\n");
@@ -377,7 +377,7 @@ EOF;
 
   function add_CNAMEEXT($hosts, $domain, $mdomain) {
     if ($hosts != "" && $domain != "" && $mdomain != "") {
-      $hosts = split(",",$hosts);
+      $hosts = explode(",",$hosts);
       foreach ($hosts as $host) {
         //$host = $this->addtabs($host);
         ////echo strlen($mdomain)."\n";
@@ -397,10 +397,10 @@ EOF;
 
   function add_MX($hosts, $ips, $priority = "") {
     if ($hosts != "" && $ips != "") {
-      $hosts = split(",",$hosts);
+      $hosts = explode(",",$hosts);
       foreach ($hosts as $host) {
         $host = $this->addtabs($host);
-        $_ips = split(",",$ips);
+        $_ips = explode(",",$ips);
         foreach ($_ips as $ip) {
           fwrite($this->h_db,"$host\tIN\tMX\t$priority\t$ip.\n");
         }
@@ -414,10 +414,10 @@ EOF;
 
   function add_extMX($extmx, $ips, $priority) {
     if ($extmx != "") {
-      $extmx = split(",",$extmx);
+      $extmx = explode(",",$extmx);
       foreach ($extmx as $mx) {
         $mx = $this->addtabs($mx);
-        $_ips = split(",",$ips);
+        $_ips = explode(",",$ips);
         foreach ($_ips as $ip) {
          $priority = $priority+10;
           fwrite($this->h_db,"$mx\tIN\tMX\t$priority\t$ip.\n");
@@ -631,7 +631,7 @@ EOF;
           $tmp='';
           foreach ($subnet->IP as $ip) {
             # Need to output octets in reverse order
-            list( $ip1, $ip2, $ip3, $ip4 ) = split( "\.", $ip['address'], 4 );
+            list( $ip1, $ip2, $ip3, $ip4 ) = explode( "\.", $ip['address'], 4 );
             # Only "A-Z", "a-z", "-" and "0-9" are allowed
             $nick = preg_replace( '/[^A-Za-z-0-9]/i', '', $ip['nick']  );
             switch ($subnet['range'] ) {

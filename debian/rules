@@ -16,6 +16,7 @@ common-binary-post-install-indep::
 	find debian/dnsservices/usr/share/dnsservices/ -type f -exec chmod 0644 {} \;
 	find debian/dnsservices/usr/share/dnsservices/ -type f -exec chown nobody:nogroup {} \;
 	find debian/dnsservices/usr/share/dnsservices/ -name *.sh -exec chmod 0744 {} \;
+	find debian/dnsservices/usr/share/dnsservices/ -name *.pl -exec chmod 0744 {} \;
 # Not nice :(
 	#find debian/dnsservices/var/lib/dnsservices/ -type d -exec chmod 0755 {} \;
 	#find debian/dnsservices/var/lib/dnsservices/ -type d -exec chown www-data:www-data {} \;

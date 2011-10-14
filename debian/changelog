@@ -1,3 +1,9 @@
+dnsservices (1.1.14) stable; urgency=low
+
+ * Add ubuntu-guinux tools
+
+ -- Miquel Martos <miquel.martos@guifi.net>  Fri, 14 Oct 2011 18:28:29 +0100
+
 dnsservices (1.1.13) stable; urgency=low
 
   * Add support for external Nameservers
