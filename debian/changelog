@@ -1,218 +1,161 @@
-dnsservices (1.1.14) stable; urgency=low
-
- * Add ubuntu-guinux tools
-
+dnsservices (1.1.14) guifi; urgency=low
+  * Add ubuntu-guinux tools
  -- Miquel Martos <miquel.martos@guifi.net>  Fri, 14 Oct 2011 18:28:29 +0100
 
 dnsservices (1.1.13) stable; urgency=low
-
   * Add support for external Nameservers
-
  -- Miquel Martos <miquel.martos@guifi.net>  Wed, 20 Apr 2011 18:03:29 +0100
 
 dnsservices (1.1.12) stable; urgency=low
-
   * Revert ExternalMX fix from last, version.
-
  -- Miquel Martos <miquel.martos@guifi.net>  Wed, 20 Apr 2011 18:03:29 +0100
 
 dnsservices (1.1.11) stable; urgency=low
-
   * Now, I get reverse ip addres from a dump
-  * ExternalMX fix!
 
+  * ExternalMX fix!
  -- Miquel Martos <miquel.martos@guifi.net>  Sat, 02 Apr 2011 20:29:29 +0100
 
 dnsservices (1.1.10) stable; urgency=low
-
   * Enabled named.conf option : listen-on-v6
-
  -- Miquel Martos <miquel.martos@guifi.net>  Sun, 13 Mar 2011 01:52:29 +0100
 
 dnsservices (1.1.9) stable; urgency=low
-
   * Some fixes
-
  -- Miquel Martos <miquel.martos@guifi.net>  Sat, 12 Mar 2011 17:20:29 +0100
 
 dnsservices (1.1.8) stable; urgency=low
-
   * Initial IPv6 Support
-
  -- Miquel Martos <miquel.martos@guifi.net>  Sat, 12 Mar 2011 13:35:29 +0100
 
 dnsservices (1.1.7) stable; urgency=low
-
   * Fixed dependances.
-
  -- Miquel Martos <miquel.martos@guifi.net>  Mon, 1 Nov 2010 18:03:29 +0100
 
 dnsservices (1.1.6) stable; urgency=low
-
   * Added file named.conf.options.private
-  * Now, named daemon work on all interfaces.
-  * changed sleep time from 285 to 160
 
+  * Now, named daemon work on all interfaces.
+
+  * changed sleep time from 285 to 160
  -- Miquel Martos <miquel.martos@guifi.net>  Mon, 1 Nov 2010 18:03:29 +0100
 
-
 dnsservices (1.1.5) stable; urgency=low
-
   * Added support for external MailServers.
-
  -- Miquel Martos <miquel.martos@guifi.net>  Mon, 1 Nov 2010 18:03:29 +0100
 
 dnsservices (1.1.4) stable; urgency=low
-
   * Reformated named.conf output.
-
  -- Miquel Martos <miquel.martos@guifi.net>  Wed, 20 Oct 2010 22:28:29 +0100
 
 dnsservices (1.1.3) stable; urgency=low
-
   * Fix on delegation creation.
-
  -- Miquel Martos <miquel.martos@guifi.net>  Thu, 14 Oct 2010 01:02:29 +0100
 
 dnsservices (1.1.2) stable; urgency=low
-
   * Updated dnsservices.php, Now, the master domain, no generate slave domains for delegated hosts.
-  * Added timeout on remote server alive tests.
 
+  * Added timeout on remote server alive tests.
  -- Miquel Martos <miquel.martos@guifi.net>  Wed, 13 Oct 2010 22:52:29 +0100
 
 dnsservices (1.1.1) stable; urgency=low
-
   * Fixed cron.d location.
-  * Updated dnsservices.php, now can use MX priority.
 
+  * Updated dnsservices.php, now can use MX priority.
  -- Miquel Martos <miquel.martos@guifi.net>  Tue, 12 Oct 2010 20:49:29 +0100
 
 dnsservices (1.1.0-02) stable; urgency=low
-
   * Added Simó Patch to check if remote dns servers are allocatable.
-
  -- Miquel Martos <miquel.martos@guifi.net>  Sat, 24 Jul 2010 23:54:29 +0100
 
 dnsservices (1.1.0) stable; urgency=low
-
   *
-
  -- Miquel Martos <miquel.martos@guifi.net>  Sat, 8 May 2010 10:02:29 +0100
 
 dnsservices (1.1.0) stable; urgency=low
-
   *
-
  -- Miquel Martos <miquel.martos@guifi.net>  Sat, 6 May 2010 17:02:29 +0100
 
 dnsservices (0.1.0-39) stable; urgency=low
-
   * more fixes.
-
  -- Miquel Martos <miquel.martos@guifi.net>  Sat, 28 Feb 2010 13:00:29 +0100
 
 dnsservices (0.1.0-36) stable; urgency=low
-
   * more fixes.
-
  -- Miquel Martos <miquel.martos@guifi.net>  Sat, 23 Feb 2010 00:35:29 +0100
+
 dnsservices (0.1.0-21) stable; urgency=low
-
   * more fixes.
-
  -- Miquel Martos <miquel.martos@guifi.net>  Sat, 22 Feb 2010 23:41:29 +0100
+
 dnsservices (0.1.0-20) stable; urgency=low
-
   * more fixes.
-
  -- Miquel Martos <miquel.martos@guifi.net>  Sat, 14 Feb 2010 23:41:29 +0100
+
 dnsservices (0.1.0-13) stable; urgency=low
-
   * more fixes.
-
  -- Miquel Martos <miquel.martos@guifi.net>  Sat, 14 Feb 2010 22:37:29 +0100
+
 dnsservices (0.1.0-12) stable; urgency=low
-
   * more fixes.
-
  -- Miquel Martos <miquel.martos@guifi.net>  Sat, 14 Feb 2010 21:53:29 +0100
+
 dnsservices (0.1.0-10) stable; urgency=low
-
   * more fixes.
-
  -- Miquel Martos <miquel.martos@guifi.net>  Sat, 14 Feb 2010 21:39:29 +0100
+
 dnsservices (0.1.0-9) stable; urgency=low
-
   * more fixes.
-
  -- Miquel Martos <miquel.martos@guifi.net>  Sat, 14 Feb 2010 21:19:29 +0100
+
 dnsservices (0.1.0-8) stable; urgency=low
-
   * more fixes.
-
  -- Miquel Martos <miquel.martos@guifi.net>  Sat, 27 Dec 2009 13:12:29 +0200
+
 dnsservices (0.1.0-3) stable; urgency=low
-
   * fix some paths
-
  -- Miquel Martos <miquel.martos@guifi.net>  Sat, 27 Dec 2009 12:08:29 +0200
+
 dnsservices (0.1.0) stable; urgency=low
-
   * another fix!. Thanks linksysds!
-
  -- Miquel Martos <miquel.martos@guifi.net>  Sat, 20 Dec 2009 20:56:29 +0200
+
 dnsservices (0.0.3-18) stable; urgency=low
-
   * some validations.
-
  -- Miquel Martos <miquel.martos@guifi.net>  Sat, 20 Dec 2009 20:02:29 +0200
+
 dnsservices (0.0.3-17) unstable; urgency=low
-
   * some installation fixes
-
  -- Tomas Velazquez <tomas.velazquez@guifi.net>  Sat, 17 Oct 2009 11:55:29 +0200
+
 dnsservices (0.0.3-16) unstable; urgency=low
-
   * some installation fixes
-
  -- Tomas Velazquez <tomas.velazquez@guifi.net>  Sat, 17 Oct 2009 03:00:29 +0200
+
 dnsservices (0.0.3-13) unstable; urgency=low
-
   * some installation fixes
-
  -- Tomas Velazquez <tomas.velazquez@guifi.net>  Sat, 17 Oct 2009 02:05:29 +0200
+
 dnsservices (0.0.3-12) unstable; urgency=low
-
   * some installation fixes
-
  -- Tomas Velazquez <tomas.velazquez@guifi.net>  Sat, 17 Oct 2009 01:44:29 +0200
+
 dnsservices (0.0.3-11) unstable; urgency=low
-
   * RNDC-KEY generated after install
-
  -- Tomas Velazquez <tomas.velazquez@guifi.net>  Sat, 17 Oct 2009 01:26:29 +0200
+
 dnsservices (0.0.3-10) unstable; urgency=low
-
   * Fixed some bugs.
-
  -- Tomas Velazquez <tomas.velazquez@guifi.net>  Sat, 17 Oct 2009 01:12:29 +0200
 
 dnsservices (0.0.3-9) unstable; urgency=low
-
   * Fixed some bugs.
-
  -- Tomas Velazquez <tomas.velazquez@guifi.net>  Sat, 17 Oct 2009 00:12:29 +0200
 
 dnsservices (0.0.3-7) unstable; urgency=low
-
   * Fixed some bugs.
-
  -- Tomas Velazquez <tomas.velazquez@guifi.net>  Wed, 14 Oct 2009 22:58:29 +0200
 
 dnsservices (0.0.3-1) unstable; urgency=low
-
   * Initial release
-
  -- Tomas Velazquez <tomas.velazquez@guifi.net>  Thu, 1 Oct 2009 00:12:29 +0200
-

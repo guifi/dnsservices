@@ -56,7 +56,7 @@ function check_cnml($cnml) {
 
 class BIND {
   var $PROGRAM = "dnsservices";
-  var $VERSION = "1.1.13";
+  var $VERSION = "1.1.14";
   var $DATE;
   var $h_named;
   var $h_db;
