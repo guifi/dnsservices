@@ -56,7 +56,7 @@ function check_cnml($cnml) {
 
 class BIND {
   var $PROGRAM = "dnsservices";
-  var $VERSION = "1.1.14";
+  var $VERSION = "1.1.15";
   var $DATE;
   var $h_named;
   var $h_db;
@@ -631,7 +631,7 @@ EOF;
           $tmp='';
           foreach ($subnet->IP as $ip) {
             # Need to output octets in reverse order
-            list( $ip1, $ip2, $ip3, $ip4 ) = explode( "\.", $ip['address'], 4 );
+            list( $ip1, $ip2, $ip3, $ip4 ) = preg_split( "/\./", $ip['address'], 4 );
             # Only "A-Z", "a-z", "-" and "0-9" are allowed
             $nick = preg_replace( '/[^A-Za-z-0-9]/i', '', $ip['nick']  );
             switch ($subnet['range'] ) {
