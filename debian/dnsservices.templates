@@ -8,3 +8,7 @@ Type: string
 Default: 2627
 Description: Select your DNS Server Id to share your domains. (Default: 0).
 
+Template: dnsservices/forcefetch
+Type: boolean
+Default: true
+Description: Force to fetch dnsservices now?.

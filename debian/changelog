@@ -1,3 +1,7 @@
+dnsservices (1.1.16) guifi; urgency=low
+  * Selectable fecth dnsservices on install.
+ -- Miquel Martos <miquel.martos@guifi.net>  Tue, 11 Jan 2014 01:10:29 +0100
+
 dnsservices (1.1.15) guifi; urgency=low
   * Re FIX deprecated function split.
  -- Miquel Martos <miquel.martos@guifi.net>  Fri, 30 Dec 2011 18:58:29 +0100

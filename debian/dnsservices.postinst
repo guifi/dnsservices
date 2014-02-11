@@ -33,7 +33,8 @@ if [ "$1" = configure ]; then
 	DNSDataServerurl=$RET
 	db_get dnsservices/DNSGraphServerId
 	DNSGraphServerId=$RET
-
+	db_get dnsservices/forcefetch
+	forcefetch=$RET
 	/bin/cat << EOT > $tmpfile
 <?php
 
@@ -72,8 +73,18 @@ EOT
         else
           touch $master_dir/named.conf.options.private && echo 'file '$master_dir'/named.conf.options.private created'
         fi
+	if [ $forcefetch = "true" ]
+	then
+        	cd /etc/bind && /usr/bin/php /usr/share/dnsservices/dnsservices.php;
+		echo "# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ";
+		echo " ";
+		echo "Please, run this command to start dnservices now or wait to the next cron job ( every 30 minutes):";
+		echo "cd /etc/bind && /usr/bin/php /usr/share/dnsservices/dnsservices.php && /etc/init.d/bind9 reload";
+		echo "SAX!";
+		echo " ";
+		echo "# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ";
 
-        cd /etc/bind && /usr/bin/php /usr/share/dnsservices/dnsservices.php;
+	fi
 
     # Deal with the aftermath of 9.2.1-5  - it's a hack, but hey..
     if [ "$lastversion" = "9.2.1-5" ]; then
