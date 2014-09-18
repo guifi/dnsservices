@@ -2,13 +2,11 @@
 
 function check_cnml($cnml) {
   $header = substr($cnml,0,5);
-    if ($header == '<?xml') {
+  $footer = substr($cnml,-8,7);
+    if (($header == '<?xml')&&($footer == '</cnml>'))
       return true;
-    }
-    else {
-      echo date("YmdHi")." Invalid CNML! cannot update! check master cnml server url on /etc/dnservices/config.php\nor check your Internent/Guifi.net connection.\n named.conf not changed! \n";
-      exit();
-    }
+    else
+      return false;
 }
 
   function check_updated($url) {
@@ -56,7 +54,7 @@ function check_cnml($cnml) {
 
 class BIND {
   var $PROGRAM = "dnsservices";
-  var $VERSION = "1.1.15";
+  var $VERSION = "1.1.17";
   var $DATE;
   var $h_named;
   var $h_db;
@@ -547,7 +545,7 @@ class DNSservices {
     fclose( $h );
 
     $check = check_cnml( $cnml );
-    if ($check = true) {
+    if ($check == true) {
       $xml = new SimpleXMLElement( $cnml );
       $dns = new BIND($this->master_dir, $this->slave_dir, $this->chroot);
       $dns->named();
@@ -561,6 +559,10 @@ class DNSservices {
           $this->view("internet", $op, $zones, $dns);
         }
       }
+    }
+    else {
+      echo date("YmdHi")." Invalid CNML! cannot update! check master cnml server url on /etc/dnservices/config.php\nor check your Internent/Guifi.net connection.\n named.conf not changed! \n";
+      exit();
     }
   }
 
@@ -675,7 +677,7 @@ EOF;
  */
   function checkNameserver($server, $zone){
     // attempt to connect
-    if ($x = @fsockopen($server, 53, $errno, $errstr, 7)) {
+    if ($x = @fsockopen($server, 53, $errno, $errstr, 4)) {
       //close connection
       if ($x) @fclose($x);
       return true;
@@ -691,9 +693,9 @@ EOF;
   $updated = check_updated($DNSDataServer_url);
   if ($updated = true) {
     if (count($argv) == 1) {
-       $secs = $DNSGraphServerId % 120;
-       echo "Sleeping for ".$secs." seconds to avoid server peaks.\n";
-       sleep($secs);
+      $secs = substr($DNSGraphServerId,2,6);
+      echo "Sleeping for ".$secs." seconds to avoid server peaks.\n";
+      sleep($secs);
     }
     $gdns = new DNSservices($DNSDataServer_url, $DNSGraphServerId, $master_dir, $slave_dir, $chroot);
     $gdns->named();

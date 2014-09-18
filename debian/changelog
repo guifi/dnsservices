@@ -1,3 +1,8 @@
+dnsservices (1.1.17) guifi; urgency=low
+  * Fix check cnml content! Thanks Setup Informatica for the patch provided!
+  * New calculation time to start the process.
+ -- Miquel Martos <miquel.martos@guifi.net>  Tue, 18 Sep 2014 16:06:29 +0100
+
 dnsservices (1.1.16) guifi; urgency=low
   * Selectable fecth dnsservices on install.
  -- Miquel Martos <miquel.martos@guifi.net>  Tue, 11 Jan 2014 01:10:29 +0100
