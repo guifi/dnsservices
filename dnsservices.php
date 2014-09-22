@@ -3,7 +3,7 @@
 function check_cnml($cnml) {
   $header = substr($cnml,0,5);
   $footer = substr($cnml,-8,7);
-    if (($header == '<?xml')&&($footer == '</cnml>'))
+    if (($header == '<?xml') && ($footer == '</cnml>'))
       return true;
     else
       return false;
@@ -54,7 +54,7 @@ function check_cnml($cnml) {
 
 class BIND {
   var $PROGRAM = "dnsservices";
-  var $VERSION = "1.1.17";
+  var $VERSION = "1.1.19";
   var $DATE;
   var $h_named;
   var $h_db;
@@ -186,7 +186,7 @@ EOF;
 
   function zone($name, $domain, $type, $list, $transfer) {
     $op = "";
-    if ($name!="")
+    if ($name != "")
       $n = "internet".".".$domain;
     else
       $n = $domain;
@@ -627,7 +627,7 @@ EOF;
       while (!feof($h)) { $cnml .= fgets( $h ) or die(date("YmdHi")." aUnable to read CNML.\n"); }
     fclose( $h );
     $check = check_cnml( $cnml );
-    if ($check = true) {
+    if ($check == true) {
       $xml = new SimpleXMLElement( $cnml );
         foreach ($xml->subnet as $subnet) {
           $tmp='';
@@ -691,9 +691,9 @@ EOF;
 
   require_once("/etc/dnsservices/config.php");
   $updated = check_updated($DNSDataServer_url);
-  if ($updated = true) {
+  if ($updated == true) {
     if (count($argv) == 1) {
-      $secs = substr($DNSGraphServerId,2,6);
+      $secs = substr($DNSGraphServerId,-2,2);
       echo "Sleeping for ".$secs." seconds to avoid server peaks.\n";
       sleep($secs);
     }
