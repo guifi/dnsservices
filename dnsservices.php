@@ -14,7 +14,7 @@ function check_cnml($cnml) {
 
     $hlastnow = @fopen($url."/guifi/refresh/dns", "r") or die('Error reading last dns refresh from remote server\n');
     $last_now = fgets($hlastnow);
-    echo "Las server refreshed time: ".$last_now."\n";
+    echo "Last server refreshed time: ".$last_now."\n";
     fclose($hlastnow);
     if (!file_exists("/tmp/last_update.dns")) {
       $lastdns= @fopen("/tmp/last_update.dns", "w+") or die('Error!');
