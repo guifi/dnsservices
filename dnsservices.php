@@ -530,7 +530,8 @@ class DNSservices {
     fclose( $h );
 
     $check = check_cnml( $cnml );
-    if ($check == true) {
+
+    if ($check) {
       $xml = new SimpleXMLElement( $cnml );
       $dns = new BIND($this->master_dir, $this->slave_dir, $this->chroot);
       $dns->named();
@@ -612,7 +613,7 @@ EOF;
       while (!feof($h)) { $cnml .= fgets( $h ) or die(date("YmdHi")." aUnable to read CNML.\n"); }
     fclose( $h );
     $check = check_cnml( $cnml );
-    if ($check == true) {
+    if ($check) {
       $xml = new SimpleXMLElement( $cnml );
         foreach ($xml->subnet as $subnet) {
           $tmp='';
@@ -676,7 +677,7 @@ EOF;
 
   require_once("/etc/dnsservices/config.php");
   $updated = check_updated($DNSDataServer_url);
-  if ($updated == true) {
+  if ($updated) {
     if (count($argv) == 1) {
       $secs = substr($DNSGraphServerId,-2,2);
       echo "Sleeping for ".$secs." seconds to avoid server peaks.\n";
