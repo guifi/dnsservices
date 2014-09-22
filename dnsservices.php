@@ -12,49 +12,34 @@ function check_cnml($cnml) {
   function check_updated($url) {
     global $DNSGraphServerId;
 
-    $now = time();
-    $mlast= @fopen("/tmp/last_dns", "r");
-      if ($mlast)
-        $last = fgets($mlast);
-     else
-        $last = 0;
-     $mins = $DNSGraphServerId % 30;
-     $fresh = $last +  ((60 + $mins) * 60);
-     print "Last time updated: ".date('Y/m/d H:i:s',(int)$last)."\n";
-     print "Fresh until:       ".date('Y/m/d H:i:s',(int)$fresh)."\n";
-
-     if (($last) and ($now < $fresh)) {
-       fclose($mlast);
-       echo "Still fresh.\n";
-       exit();
-     }
-
-    $hlastnow = @fopen($url."/guifi/refresh/dns", "r") or die('Error reading changes\n');
+    $hlastnow = @fopen($url."/guifi/refresh/dns", "r") or die('Error reading last dns refresh from remote server\n');
     $last_now = fgets($hlastnow);
+    echo "Las server refreshed time: ".$last_now."\n";
     fclose($hlastnow);
-    $hlast= @fopen("/tmp/last_update.dns", "r");
-    if (($hlast) and ($last_now == fgets($hlast))) {
-      fclose($hlast);
-      echo "No domain and hosts changes.\n";
-      $hlast= @fopen("/tmp/last_dns", "w+") or die('Error!');
-      fwrite($hlast,$now);
-      fclose($hlast);
-      exit();
+    if (!file_exists("/tmp/last_update.dns")) {
+      $lastdns= @fopen("/tmp/last_update.dns", "w+") or die('Error!');
+      fwrite($lastdns,"0");
+      fclose($lastdns);
    }
-   $hlast= @fopen("/tmp/last_update.dns", "w+") or die('Error!');
-   fwrite($hlast,$last_now);
-   fclose($hlast);
-   $hlast= @fopen("/tmp/last_dns", "w+") or die('Error!');
-   fwrite($hlast,$now);
-   fclose($hlast);
-
-   echo $last_now." updated!\n";
-}
-
+    $hlast= @fopen("/tmp/last_update.dns", "r");
+    $last_local = fgets($hlast);
+    echo "Last local refreshed time: ".$last_local."\n";
+    if ($last_now === $last_local) {
+      fclose($hlast);
+      echo "No domain or/and hosts changes. Still fresh!\n";
+      return false;
+    }
+    else {
+      $hlast= @fopen("/tmp/last_update.dns", "w+") or die('Error!');
+      fwrite($hlast,$last_now);
+      fclose($hlast);
+      return true;
+    }
+  }
 
 class BIND {
   var $PROGRAM = "dnsservices";
-  var $VERSION = "1.1.19";
+  var $VERSION = "1.1.20";
   var $DATE;
   var $h_named;
   var $h_db;
@@ -700,6 +685,7 @@ EOF;
     $gdns = new DNSservices($DNSDataServer_url, $DNSGraphServerId, $master_dir, $slave_dir, $chroot);
     $gdns->named();
     $gdns->rrz();
+    echo "DNSServices configuration updated!\n";
   }
 
 ?>

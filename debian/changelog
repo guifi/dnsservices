@@ -1,10 +1,14 @@
+dnsservices (1.1.20) guifi; urgency=low
+  * Update configuration only when ther server has newer data.
+ -- Miquel Martos <miquel.martos@guifi.net>  Mon, 22 Sep 2014 17:10:29 +0100
+
 dnsservices (1.1.19) guifi; urgency=low
   * Fix operators in some conditions. Thnx Luis Grabriel
- -- Miquel Martos <miquel.martos@guifi.net>  Tue, 21 Sep 2014 22:00:29 +0100
+ -- Miquel Martos <miquel.martos@guifi.net>  Mon, 22 Sep 2014 22:00:29 +0100
 
 dnsservices (1.1.18) guifi; urgency=low
   * Fix wait time calculation.
- -- Miquel Martos <miquel.martos@guifi.net>  Tue, 21 Sep 2014 22:00:29 +0100
+ -- Miquel Martos <miquel.martos@guifi.net>  Sun, 21 Sep 2014 22:00:29 +0100
 
 dnsservices (1.1.17) guifi; urgency=low
   * Fix check cnml content! Thanks Setup Informatica for the patch provided!
