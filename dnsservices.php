@@ -67,9 +67,9 @@ options {
 	recursion no;
 	listen-on { any; };
 	listen-on-v6 { any; };
-};
 
-include "$this->master_dir/named.conf.options.private";
+	include "$this->master_dir/named.conf.options.private";
+};
 
 EOF;
     fwrite($this->h_named, $file);
