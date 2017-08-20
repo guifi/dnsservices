@@ -1,3 +1,11 @@
+dnsservices (1.1.23) ubuntu; urgency=low
+  * named.root: Replace only if valid.
+ -- Miquel Martos <miquel.martos@guifi.net>  Sun, 20 Aug 2017 20:25:29 +0100
+
+dnsservices (1.1.22) guifi; urgency=low
+  * Remove ubuntu-guinux tools
+ -- Miquel Martos <miquel.martos@guifi.net>  Fri, 28 Apr 2017 18:28:29 +0100
+
 dnsservices (1.1.21) guifi; urgency=low
   * Fix include position dor private options. Thanks Josep Lladonosa!
  -- Miquel Martos <miquel.martos@guifi.net>  Sat, 23 May 2015 00:55:29 +0100

@@ -39,7 +39,7 @@ function check_cnml($cnml) {
 
 class BIND {
   var $PROGRAM = "dnsservices";
-  var $VERSION = "1.1.20";
+  var $VERSION = "1.1.23";
   var $DATE;
   var $h_named;
   var $h_db;
@@ -135,14 +135,16 @@ EOF;
     fwrite($h, $file);
     fclose($h);
 
-    $cnml = "";
-    $h = fopen("http://www.internic.net/zones/named.root", "r") or die(date("YmdHi")." Unable to fetch named.root.\n");
-    while (!feof($h)) { $cnml .= fgets( $h ) or die(date("YmdHi")." .Unable to read CNML.\n"); }
-    fclose( $h );
-    $h = fopen($this->chroot.$this->master_dir."/named.root", "w");
-    fwrite($h, $cnml);
-    fclose($h);
+    $content = $this->chroot.$this->master_dir."/named.root.tmp";
+    $url = "http://www.internic.net/zones/named.root";
 
+    file_put_contents($content , fopen( $url, 'r'));
+
+   if( strpos(file_get_contents( $content ), "A.ROOT-SERVERS.NET") !== false) {
+     $contentOK = $this->chroot.$this->master_dir."/named.root";
+      file_put_contents($contentOK , fopen( $content, 'r'));
+      unlink($content);
+    }
   }
 
   function view_ini($name, $opt) {
